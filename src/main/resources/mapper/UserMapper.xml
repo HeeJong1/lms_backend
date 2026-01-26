@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmsproject.lms_backend.mapper.UserMapper">
+    
+    <resultMap id="UserResultMap" type="com.lmsproject.lms_backend.model.User">
+        <id property="userId" column="user_id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="name" column="name"/>
+        <result property="email" column="email"/>
+        <result property="role" column="role"/>
+        <result property="grade" column="grade"/>
+        <result property="totalCredits" column="total_credits"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+    
+    <select id="findByUsername" resultMap="UserResultMap">
+        SELECT user_id, username, password, name, email, role, grade, total_credits, created_at, updated_at
+        FROM users
+        WHERE username = #{username}
+    </select>
+    
+    <select id="findById" resultMap="UserResultMap">
+        SELECT user_id, username, password, name, email, role, grade, total_credits, created_at, updated_at
+        FROM users
+        WHERE user_id = #{userId}
+    </select>
+    
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="userId">
+        INSERT INTO users (username, password, name, email, role, grade, total_credits, created_at, updated_at)
+        VALUES (#{username}, #{password}, #{name}, #{email}, #{role}, COALESCE(#{grade}, 1), 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    </insert>
+    
+    <update id="updateUser">
+        UPDATE users
+        SET username = #{username},
+            password = #{password},
+            name = #{name},
+            email = #{email},
+            role = #{role},
+            grade = #{grade},
+            total_credits = #{totalCredits},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE user_id = #{userId}
+    </update>
+    
+</mapper>

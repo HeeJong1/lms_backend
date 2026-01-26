@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmsproject.lms_backend.mapper.CourseMaterialMapper">
+    
+    <resultMap id="CourseMaterialResultMap" type="com.lmsproject.lms_backend.model.CourseMaterial">
+        <id property="materialId" column="material_id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="courseName" column="course_name"/>
+        <result property="courseCode" column="course_code"/>
+        <result property="uploaderId" column="uploader_id"/>
+        <result property="uploaderName" column="uploader_name"/>
+        <result property="title" column="title"/>
+        <result property="description" column="description"/>
+        <result property="filePath" column="file_path"/>
+        <result property="fileName" column="file_name"/>
+        <result property="fileSize" column="file_size"/>
+        <result property="fileType" column="file_type"/>
+        <result property="category" column="category"/>
+        <result property="downloadCount" column="download_count"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+    
+    <select id="findAll" resultMap="CourseMaterialResultMap">
+        SELECT m.material_id, m.course_id, m.uploader_id,
+               c.course_name, c.course_code,
+               u.name as uploader_name,
+               m.title, m.description, m.file_path, m.file_name, m.file_size, m.file_type,
+               m.category, m.download_count, m.created_at, m.updated_at
+        FROM course_materials m
+        LEFT JOIN courses c ON m.course_id = c.course_id
+        LEFT JOIN users u ON m.uploader_id = u.user_id
+        ORDER BY m.created_at DESC
+    </select>
+    
+    <select id="findById" resultMap="CourseMaterialResultMap">
+        SELECT m.material_id, m.course_id, m.uploader_id,
+               c.course_name, c.course_code,
+               u.name as uploader_name,
+               m.title, m.description, m.file_path, m.file_name, m.file_size, m.file_type,
+               m.category, m.download_count, m.created_at, m.updated_at
+        FROM course_materials m
+        LEFT JOIN courses c ON m.course_id = c.course_id
+        LEFT JOIN users u ON m.uploader_id = u.user_id
+        WHERE m.material_id = #{materialId}
+    </select>
+    
+    <select id="findByCourseId" resultMap="CourseMaterialResultMap">
+        SELECT m.material_id, m.course_id, m.uploader_id,
+               c.course_name, c.course_code,
+               u.name as uploader_name,
+               m.title, m.description, m.file_path, m.file_name, m.file_size, m.file_type,
+               m.category, m.download_count, m.created_at, m.updated_at
+        FROM course_materials m
+        LEFT JOIN courses c ON m.course_id = c.course_id
+        LEFT JOIN users u ON m.uploader_id = u.user_id
+        WHERE m.course_id = #{courseId}
+        ORDER BY m.category, m.created_at DESC
+    </select>
+    
+    <select id="findByCategory" resultMap="CourseMaterialResultMap">
+        SELECT m.material_id, m.course_id, m.uploader_id,
+               c.course_name, c.course_code,
+               u.name as uploader_name,
+               m.title, m.description, m.file_path, m.file_name, m.file_size, m.file_type,
+               m.category, m.download_count, m.created_at, m.updated_at
+        FROM course_materials m
+        LEFT JOIN courses c ON m.course_id = c.course_id
+        LEFT JOIN users u ON m.uploader_id = u.user_id
+        WHERE m.category = #{category}
+        ORDER BY m.created_at DESC
+    </select>
+    
+    <insert id="insertMaterial" useGeneratedKeys="true" keyProperty="materialId">
+        INSERT INTO course_materials (course_id, uploader_id, title, description,
+                                    file_path, file_name, file_size, file_type, category,
+                                    download_count, created_at, updated_at)
+        VALUES (#{courseId}, #{uploaderId}, #{title}, #{description},
+                #{filePath}, #{fileName}, #{fileSize}, #{fileType}, #{category},
+                0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    </insert>
+    
+    <update id="updateMaterial">
+        UPDATE course_materials
+        SET title = #{title},
+            description = #{description},
+            category = #{category},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE material_id = #{materialId}
+    </update>
+    
+    <delete id="deleteMaterial">
+        DELETE FROM course_materials
+        WHERE material_id = #{materialId}
+    </delete>
+    
+    <update id="incrementDownloadCount">
+        UPDATE course_materials
+        SET download_count = download_count + 1
+        WHERE material_id = #{materialId}
+    </update>
+    
+</mapper>

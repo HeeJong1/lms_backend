@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmsproject.lms_backend.mapper.AnnouncementMapper">
+    
+    <resultMap id="AnnouncementResultMap" type="com.lmsproject.lms_backend.model.Announcement">
+        <id property="announcementId" column="announcement_id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="courseName" column="course_name"/>
+        <result property="courseCode" column="course_code"/>
+        <result property="authorId" column="author_id"/>
+        <result property="authorName" column="author_name"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="isImportant" column="is_important"/>
+        <result property="targetRole" column="target_role"/>
+        <result property="viewCount" column="view_count"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+    
+    <select id="findAll" resultMap="AnnouncementResultMap">
+        SELECT a.announcement_id, a.course_id, a.author_id,
+               c.course_name, c.course_code,
+               u.name as author_name,
+               a.title, a.content, a.is_important, a.target_role, a.view_count,
+               a.created_at, a.updated_at
+        FROM announcements a
+        LEFT JOIN courses c ON a.course_id = c.course_id
+        LEFT JOIN users u ON a.author_id = u.user_id
+        ORDER BY a.is_important DESC, a.created_at DESC
+    </select>
+    
+    <select id="findById" resultMap="AnnouncementResultMap">
+        SELECT a.announcement_id, a.course_id, a.author_id,
+               c.course_name, c.course_code,
+               u.name as author_name,
+               a.title, a.content, a.is_important, a.target_role, a.view_count,
+               a.created_at, a.updated_at
+        FROM announcements a
+        LEFT JOIN courses c ON a.course_id = c.course_id
+        LEFT JOIN users u ON a.author_id = u.user_id
+        WHERE a.announcement_id = #{announcementId}
+    </select>
+    
+    <select id="findByCourseId" resultMap="AnnouncementResultMap">
+        SELECT a.announcement_id, a.course_id, a.author_id,
+               c.course_name, c.course_code,
+               u.name as author_name,
+               a.title, a.content, a.is_important, a.target_role, a.view_count,
+               a.created_at, a.updated_at
+        FROM announcements a
+        LEFT JOIN courses c ON a.course_id = c.course_id
+        LEFT JOIN users u ON a.author_id = u.user_id
+        WHERE a.course_id = #{courseId}
+        ORDER BY a.is_important DESC, a.created_at DESC
+    </select>
+    
+    <select id="findByAuthorId" resultMap="AnnouncementResultMap">
+        SELECT a.announcement_id, a.course_id, a.author_id,
+               c.course_name, c.course_code,
+               u.name as author_name,
+               a.title, a.content, a.is_important, a.target_role, a.view_count,
+               a.created_at, a.updated_at
+        FROM announcements a
+        LEFT JOIN courses c ON a.course_id = c.course_id
+        LEFT JOIN users u ON a.author_id = u.user_id
+        WHERE a.author_id = #{authorId}
+        ORDER BY a.created_at DESC
+    </select>
+    
+    <select id="findByTargetRole" resultMap="AnnouncementResultMap">
+        SELECT a.announcement_id, a.course_id, a.author_id,
+               c.course_name, c.course_code,
+               u.name as author_name,
+               a.title, a.content, a.is_important, a.target_role, a.view_count,
+               a.created_at, a.updated_at
+        FROM announcements a
+        LEFT JOIN courses c ON a.course_id = c.course_id
+        LEFT JOIN users u ON a.author_id = u.user_id
+        WHERE a.target_role = #{targetRole} OR a.target_role IS NULL
+        ORDER BY a.is_important DESC, a.created_at DESC
+    </select>
+    
+    <select id="findImportant" resultMap="AnnouncementResultMap">
+        SELECT a.announcement_id, a.course_id, a.author_id,
+               c.course_name, c.course_code,
+               u.name as author_name,
+               a.title, a.content, a.is_important, a.target_role, a.view_count,
+               a.created_at, a.updated_at
+        FROM announcements a
+        LEFT JOIN courses c ON a.course_id = c.course_id
+        LEFT JOIN users u ON a.author_id = u.user_id
+        WHERE a.is_important = TRUE
+        ORDER BY a.created_at DESC
+    </select>
+    
+    <insert id="insertAnnouncement" useGeneratedKeys="true" keyProperty="announcementId">
+        INSERT INTO announcements (course_id, author_id, title, content, is_important, target_role, view_count, created_at, updated_at)
+        VALUES (#{courseId}, #{authorId}, #{title}, #{content}, COALESCE(#{isImportant}, FALSE), #{targetRole}, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    </insert>
+    
+    <update id="updateAnnouncement">
+        UPDATE announcements
+        SET title = #{title},
+            content = #{content},
+            is_important = #{isImportant},
+            target_role = #{targetRole},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE announcement_id = #{announcementId}
+    </update>
+    
+    <delete id="deleteAnnouncement">
+        DELETE FROM announcements
+        WHERE announcement_id = #{announcementId}
+    </delete>
+    
+    <update id="incrementViewCount">
+        UPDATE announcements
+        SET view_count = view_count + 1
+        WHERE announcement_id = #{announcementId}
+    </update>
+    
+</mapper>

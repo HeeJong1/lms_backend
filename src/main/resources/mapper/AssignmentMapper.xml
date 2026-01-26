@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmsproject.lms_backend.mapper.AssignmentMapper">
+    
+    <resultMap id="AssignmentResultMap" type="com.lmsproject.lms_backend.model.Assignment">
+        <id property="assignmentId" column="assignment_id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="courseName" column="course_name"/>
+        <result property="courseCode" column="course_code"/>
+        <result property="instructorId" column="instructor_id"/>
+        <result property="instructorName" column="instructor_name"/>
+        <result property="title" column="title"/>
+        <result property="description" column="description"/>
+        <result property="dueDate" column="due_date"/>
+        <result property="maxScore" column="max_score"/>
+        <result property="submissionCount" column="submission_count"/>
+        <result property="gradedCount" column="graded_count"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+    
+    <select id="findAll" resultMap="AssignmentResultMap">
+        SELECT a.assignment_id, a.course_id, a.instructor_id,
+               c.course_name, c.course_code,
+               u.name as instructor_name,
+               a.title, a.description, a.due_date, a.max_score,
+               (SELECT COUNT(*) FROM assignment_submissions WHERE assignment_id = a.assignment_id) as submission_count,
+               (SELECT COUNT(*) FROM assignment_submissions WHERE assignment_id = a.assignment_id AND status = 'GRADED') as graded_count,
+               a.created_at, a.updated_at
+        FROM assignments a
+        LEFT JOIN courses c ON a.course_id = c.course_id
+        LEFT JOIN users u ON a.instructor_id = u.user_id
+        ORDER BY a.due_date DESC, a.created_at DESC
+    </select>
+    
+    <select id="findById" resultMap="AssignmentResultMap">
+        SELECT a.assignment_id, a.course_id, a.instructor_id,
+               c.course_name, c.course_code,
+               u.name as instructor_name,
+               a.title, a.description, a.due_date, a.max_score,
+               (SELECT COUNT(*) FROM assignment_submissions WHERE assignment_id = a.assignment_id) as submission_count,
+               (SELECT COUNT(*) FROM assignment_submissions WHERE assignment_id = a.assignment_id AND status = 'GRADED') as graded_count,
+               a.created_at, a.updated_at
+        FROM assignments a
+        LEFT JOIN courses c ON a.course_id = c.course_id
+        LEFT JOIN users u ON a.instructor_id = u.user_id
+        WHERE a.assignment_id = #{assignmentId}
+    </select>
+    
+    <select id="findByCourseId" resultMap="AssignmentResultMap">
+        SELECT a.assignment_id, a.course_id, a.instructor_id,
+               c.course_name, c.course_code,
+               u.name as instructor_name,
+               a.title, a.description, a.due_date, a.max_score,
+               (SELECT COUNT(*) FROM assignment_submissions WHERE assignment_id = a.assignment_id) as submission_count,
+               (SELECT COUNT(*) FROM assignment_submissions WHERE assignment_id = a.assignment_id AND status = 'GRADED') as graded_count,
+               a.created_at, a.updated_at
+        FROM assignments a
+        LEFT JOIN courses c ON a.course_id = c.course_id
+        LEFT JOIN users u ON a.instructor_id = u.user_id
+        WHERE a.course_id = #{courseId}
+        ORDER BY a.due_date DESC, a.created_at DESC
+    </select>
+    
+    <select id="findByInstructorId" resultMap="AssignmentResultMap">
+        SELECT a.assignment_id, a.course_id, a.instructor_id,
+               c.course_name, c.course_code,
+               u.name as instructor_name,
+               a.title, a.description, a.due_date, a.max_score,
+               (SELECT COUNT(*) FROM assignment_submissions WHERE assignment_id = a.assignment_id) as submission_count,
+               (SELECT COUNT(*) FROM assignment_submissions WHERE assignment_id = a.assignment_id AND status = 'GRADED') as graded_count,
+               a.created_at, a.updated_at
+        FROM assignments a
+        LEFT JOIN courses c ON a.course_id = c.course_id
+        LEFT JOIN users u ON a.instructor_id = u.user_id
+        WHERE a.instructor_id = #{instructorId}
+        ORDER BY a.due_date DESC, a.created_at DESC
+    </select>
+    
+    <insert id="insertAssignment" useGeneratedKeys="true" keyProperty="assignmentId">
+        INSERT INTO assignments (course_id, instructor_id, title, description, due_date, max_score, created_at, updated_at)
+        VALUES (#{courseId}, #{instructorId}, #{title}, #{description}, #{dueDate}, #{maxScore}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    </insert>
+    
+    <update id="updateAssignment">
+        UPDATE assignments
+        SET title = #{title},
+            description = #{description},
+            due_date = #{dueDate},
+            max_score = #{maxScore},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE assignment_id = #{assignmentId}
+    </update>
+    
+    <delete id="deleteAssignment">
+        DELETE FROM assignments
+        WHERE assignment_id = #{assignmentId}
+    </delete>
+    
+</mapper>

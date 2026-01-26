@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmsproject.lms_backend.mapper.GradeMapper">
+    
+    <resultMap id="GradeResultMap" type="com.lmsproject.lms_backend.model.Grade">
+        <id property="gradeId" column="grade_id"/>
+        <result property="enrollmentId" column="enrollment_id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="studentName" column="student_name"/>
+        <result property="courseName" column="course_name"/>
+        <result property="courseCode" column="course_code"/>
+        <result property="midtermScore" column="midterm_score"/>
+        <result property="finalScore" column="final_score"/>
+        <result property="assignmentScore" column="assignment_score"/>
+        <result property="attendanceScore" column="attendance_score"/>
+        <result property="totalScore" column="total_score"/>
+        <result property="letterGrade" column="letter_grade"/>
+        <result property="gpa" column="gpa"/>
+        <result property="remarks" column="remarks"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+    
+    <select id="findAll" resultMap="GradeResultMap">
+        SELECT g.grade_id, g.enrollment_id, g.student_id, g.course_id,
+               u.name as student_name,
+               c.course_name, c.course_code,
+               g.midterm_score, g.final_score, g.assignment_score, g.attendance_score,
+               g.total_score, g.letter_grade, g.gpa, g.remarks,
+               g.created_at, g.updated_at
+        FROM grades g
+        LEFT JOIN users u ON g.student_id = u.user_id
+        LEFT JOIN courses c ON g.course_id = c.course_id
+        ORDER BY g.created_at DESC
+    </select>
+    
+    <select id="findById" resultMap="GradeResultMap">
+        SELECT g.grade_id, g.enrollment_id, g.student_id, g.course_id,
+               u.name as student_name,
+               c.course_name, c.course_code,
+               g.midterm_score, g.final_score, g.assignment_score, g.attendance_score,
+               g.total_score, g.letter_grade, g.gpa, g.remarks,
+               g.created_at, g.updated_at
+        FROM grades g
+        LEFT JOIN users u ON g.student_id = u.user_id
+        LEFT JOIN courses c ON g.course_id = c.course_id
+        WHERE g.grade_id = #{gradeId}
+    </select>
+    
+    <select id="findByEnrollmentId" resultMap="GradeResultMap">
+        SELECT g.grade_id, g.enrollment_id, g.student_id, g.course_id,
+               u.name as student_name,
+               c.course_name, c.course_code,
+               g.midterm_score, g.final_score, g.assignment_score, g.attendance_score,
+               g.total_score, g.letter_grade, g.gpa, g.remarks,
+               g.created_at, g.updated_at
+        FROM grades g
+        LEFT JOIN users u ON g.student_id = u.user_id
+        LEFT JOIN courses c ON g.course_id = c.course_id
+        WHERE g.enrollment_id = #{enrollmentId}
+    </select>
+    
+    <select id="findByStudentId" resultMap="GradeResultMap">
+        SELECT g.grade_id, g.enrollment_id, g.student_id, g.course_id,
+               u.name as student_name,
+               c.course_name, c.course_code,
+               g.midterm_score, g.final_score, g.assignment_score, g.attendance_score,
+               g.total_score, g.letter_grade, g.gpa, g.remarks,
+               g.created_at, g.updated_at
+        FROM grades g
+        LEFT JOIN users u ON g.student_id = u.user_id
+        LEFT JOIN courses c ON g.course_id = c.course_id
+        WHERE g.student_id = #{studentId}
+        ORDER BY g.created_at DESC
+    </select>
+    
+    <select id="findByCourseId" resultMap="GradeResultMap">
+        SELECT g.grade_id, g.enrollment_id, g.student_id, g.course_id,
+               u.name as student_name,
+               c.course_name, c.course_code,
+               g.midterm_score, g.final_score, g.assignment_score, g.attendance_score,
+               g.total_score, g.letter_grade, g.gpa, g.remarks,
+               g.created_at, g.updated_at
+        FROM grades g
+        LEFT JOIN users u ON g.student_id = u.user_id
+        LEFT JOIN courses c ON g.course_id = c.course_id
+        WHERE g.course_id = #{courseId}
+        ORDER BY g.total_score DESC
+    </select>
+    
+    <insert id="insertGrade" useGeneratedKeys="true" keyProperty="gradeId">
+        INSERT INTO grades (enrollment_id, student_id, course_id,
+                           midterm_score, final_score, assignment_score, attendance_score,
+                           remarks, created_at, updated_at)
+        VALUES (#{enrollmentId}, #{studentId}, #{courseId},
+                #{midtermScore}, #{finalScore}, #{assignmentScore}, #{attendanceScore},
+                #{remarks}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    </insert>
+    
+    <update id="updateGrade">
+        UPDATE grades
+        SET midterm_score = #{midtermScore},
+            final_score = #{finalScore},
+            assignment_score = #{assignmentScore},
+            attendance_score = #{attendanceScore},
+            remarks = #{remarks},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE grade_id = #{gradeId}
+    </update>
+    
+    <delete id="deleteGrade">
+        DELETE FROM grades
+        WHERE grade_id = #{gradeId}
+    </delete>
+    
+</mapper>

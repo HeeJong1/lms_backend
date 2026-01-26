@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmsproject.lms_backend.mapper.CourseMapper">
+    
+    <resultMap id="CourseResultMap" type="com.lmsproject.lms_backend.model.Course">
+        <id property="courseId" column="course_id"/>
+        <result property="courseCode" column="course_code"/>
+        <result property="courseName" column="course_name"/>
+        <result property="description" column="description"/>
+        <result property="instructorId" column="instructor_id"/>
+        <result property="instructorName" column="instructor_name"/>
+        <result property="maxStudents" column="max_students"/>
+        <result property="currentStudents" column="current_students"/>
+        <result property="credits" column="credits"/>
+        <result property="status" column="status"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+    
+    <select id="findAll" resultMap="CourseResultMap">
+        SELECT c.course_id, c.course_code, c.course_name, c.description,
+               c.instructor_id, u.name as instructor_name,
+               c.max_students, c.current_students, c.credits, c.status,
+               c.created_at, c.updated_at
+        FROM courses c
+        LEFT JOIN users u ON c.instructor_id = u.user_id
+        ORDER BY c.created_at DESC
+    </select>
+    
+    <select id="findById" resultMap="CourseResultMap">
+        SELECT c.course_id, c.course_code, c.course_name, c.description,
+               c.instructor_id, u.name as instructor_name,
+               c.max_students, c.current_students, c.credits, c.status,
+               c.created_at, c.updated_at
+        FROM courses c
+        LEFT JOIN users u ON c.instructor_id = u.user_id
+        WHERE c.course_id = #{courseId}
+    </select>
+    
+    <select id="findByInstructorId" resultMap="CourseResultMap">
+        SELECT c.course_id, c.course_code, c.course_name, c.description,
+               c.instructor_id, u.name as instructor_name,
+               c.max_students, c.current_students, c.credits, c.status,
+               c.created_at, c.updated_at
+        FROM courses c
+        LEFT JOIN users u ON c.instructor_id = u.user_id
+        WHERE c.instructor_id = #{instructorId}
+        ORDER BY c.created_at DESC
+    </select>
+    
+    <insert id="insertCourse" useGeneratedKeys="true" keyProperty="courseId">
+        INSERT INTO courses (course_code, course_name, description, instructor_id, 
+                            max_students, current_students, credits, status, created_at, updated_at)
+        VALUES (#{courseCode}, #{courseName}, #{description}, #{instructorId},
+                #{maxStudents}, 0, COALESCE(#{credits}, 3), #{status}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    </insert>
+    
+    <update id="updateCourse">
+        UPDATE courses
+        SET course_code = #{courseCode},
+            course_name = #{courseName},
+            description = #{description},
+            instructor_id = #{instructorId},
+            max_students = #{maxStudents},
+            status = #{status},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE course_id = #{courseId}
+    </update>
+    
+    <update id="updateCurrentStudents">
+        UPDATE courses
+        SET current_students = #{currentStudents},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE course_id = #{courseId}
+    </update>
+    
+</mapper>
