@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/* 강의 관리 API 컨트롤러 - 강의 목록/상세 화면 */
 @RestController
 @RequestMapping("/api/courses")
 @RequiredArgsConstructor
@@ -16,6 +17,7 @@ public class CourseController {
     
     private final CourseService courseService;
     
+    /* 강의 목록 화면 (app/courses/page.tsx) */
     @GetMapping
     public ApiResponse<List<Course>> getAllCourses() {
         try {
@@ -26,6 +28,7 @@ public class CourseController {
         }
     }
     
+    /* 강의 상세 화면 (app/courses/page.tsx) */
     @GetMapping("/{courseId}")
     public ApiResponse<Course> getCourseById(@PathVariable Long courseId) {
         try {
@@ -37,6 +40,7 @@ public class CourseController {
         }
     }
     
+    /* 강의 목록 화면 - 강사별 강의 조회 (app/courses/page.tsx) */
     @GetMapping("/instructor/{instructorId}")
     public ApiResponse<List<Course>> getCoursesByInstructor(@PathVariable Long instructorId) {
         try {
@@ -47,6 +51,7 @@ public class CourseController {
         }
     }
     
+    /* 강의 생성 화면 (app/courses/create/page.tsx) */
     @PostMapping
     public ApiResponse<Course> createCourse(@RequestBody Course course) {
         try {
@@ -57,6 +62,7 @@ public class CourseController {
         }
     }
     
+    /* 강의 수정 화면 (app/courses/create/page.tsx) */
     @PutMapping("/{courseId}")
     public ApiResponse<Course> updateCourse(@PathVariable Long courseId, @RequestBody Course course) {
         try {

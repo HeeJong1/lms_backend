@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+/* 수강신청 관리 API 컨트롤러 - 수강신청 목록/관리 화면 */
 @RestController
 @RequestMapping("/api/enrollments")
 @RequiredArgsConstructor
@@ -17,6 +18,7 @@ public class EnrollmentController {
     
     private final EnrollmentService enrollmentService;
     
+    /* 수강신청 목록 화면 (app/enrollments/page.tsx, app/admin/enrollments/page.tsx) */
     @GetMapping
     public ApiResponse<List<Enrollment>> getAllEnrollments() {
         try {
@@ -27,6 +29,7 @@ public class EnrollmentController {
         }
     }
     
+    /* 수강신청 상세 화면 (app/enrollments/page.tsx) */
     @GetMapping("/{enrollmentId}")
     public ApiResponse<Enrollment> getEnrollmentById(@PathVariable Long enrollmentId) {
         try {
@@ -38,6 +41,7 @@ public class EnrollmentController {
         }
     }
     
+    /* 수강신청 목록 화면 - 학생별 조회 (app/enrollments/page.tsx) */
     @GetMapping("/student/{studentId}")
     public ApiResponse<List<Enrollment>> getEnrollmentsByStudent(@PathVariable Long studentId) {
         try {
@@ -48,6 +52,7 @@ public class EnrollmentController {
         }
     }
     
+    /* 수강신청 목록 화면 - 강의별 조회 (app/admin/enrollments/page.tsx) */
     @GetMapping("/course/{courseId}")
     public ApiResponse<List<Enrollment>> getEnrollmentsByCourse(@PathVariable Long courseId) {
         try {
@@ -58,6 +63,7 @@ public class EnrollmentController {
         }
     }
     
+    /* 수강신청 목록 화면 - 상태별 조회 (app/admin/enrollments/page.tsx) */
     @GetMapping("/status/{status}")
     public ApiResponse<List<Enrollment>> getEnrollmentsByStatus(@PathVariable String status) {
         try {
@@ -68,6 +74,7 @@ public class EnrollmentController {
         }
     }
     
+    /* 강의 목록 화면 - 수강신청 버튼 (app/courses/page.tsx) */
     @PostMapping("/apply")
     public ApiResponse<Enrollment> applyEnrollment(@RequestBody Map<String, Long> request) {
         try {
@@ -85,6 +92,7 @@ public class EnrollmentController {
         }
     }
     
+    /* 수강신청 관리 화면 - 승인 버튼 (app/admin/enrollments/page.tsx) */
     @PostMapping("/{enrollmentId}/approve")
     public ApiResponse<Enrollment> approveEnrollment(@PathVariable Long enrollmentId) {
         try {
@@ -95,6 +103,7 @@ public class EnrollmentController {
         }
     }
     
+    /* 수강신청 관리 화면 - 반려 버튼 (app/admin/enrollments/page.tsx) */
     @PostMapping("/{enrollmentId}/reject")
     public ApiResponse<Enrollment> rejectEnrollment(
             @PathVariable Long enrollmentId,
@@ -108,6 +117,7 @@ public class EnrollmentController {
         }
     }
     
+    /* 수강신청 목록 화면 - 취소 버튼 (app/enrollments/page.tsx) */
     @PostMapping("/{enrollmentId}/cancel")
     public ApiResponse<Enrollment> cancelEnrollment(
             @PathVariable Long enrollmentId,
@@ -126,6 +136,7 @@ public class EnrollmentController {
         }
     }
     
+    /* 수강신청 관리 화면 - 일괄 승인 버튼 (app/admin/enrollments/page.tsx) */
     @PostMapping("/batch/approve")
     public ApiResponse<List<Enrollment>> approveEnrollmentsBatch(@RequestBody Map<String, Object> request) {
         try {
@@ -163,6 +174,7 @@ public class EnrollmentController {
         }
     }
     
+    /* 수강신청 관리 화면 - 일괄 반려 버튼 (app/admin/enrollments/page.tsx) */
     @PostMapping("/batch/reject")
     public ApiResponse<List<Enrollment>> rejectEnrollmentsBatch(@RequestBody Map<String, Object> request) {
         try {

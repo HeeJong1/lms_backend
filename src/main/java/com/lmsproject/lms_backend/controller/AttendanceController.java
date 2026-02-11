@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
+/* 출석 관리 API 컨트롤러 - 출석 조회/입력 화면 */
 @RestController
 @RequestMapping("/api/attendance")
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ public class AttendanceController {
 
     private final AttendanceService attendanceService;
 
+    /* 출석 목록 화면 - 전체 출석 조회 (app/attendance/page.tsx, app/admin/attendance/page.tsx) */
     @GetMapping
     public ApiResponse<List<Attendance>> getAllAttendance() {
         try {
@@ -30,6 +32,7 @@ public class AttendanceController {
         }
     }
 
+    /* 출석 상세 화면 (app/attendance/page.tsx) */
     @GetMapping("/{attendanceId}")
     public ApiResponse<Attendance> getAttendanceById(@PathVariable Long attendanceId) {
         try {
@@ -41,6 +44,7 @@ public class AttendanceController {
         }
     }
 
+    /* 출석 목록 화면 - 수강신청별 조회 (app/attendance/page.tsx) */
     @GetMapping("/enrollment/{enrollmentId}")
     public ApiResponse<List<Attendance>> getAttendanceByEnrollmentId(@PathVariable Long enrollmentId) {
         try {
@@ -51,6 +55,7 @@ public class AttendanceController {
         }
     }
 
+    /* 출석률 조회 화면 (app/attendance/page.tsx) */
     @GetMapping("/enrollment/{enrollmentId}/rate")
     public ApiResponse<Map<String, Object>> getAttendanceRate(@PathVariable Long enrollmentId) {
         try {
@@ -61,6 +66,7 @@ public class AttendanceController {
         }
     }
 
+    /* 출석 목록 화면 - 학생별 조회 (app/attendance/page.tsx) */
     @GetMapping("/student/{studentId}")
     public ApiResponse<List<Attendance>> getAttendanceByStudentId(@PathVariable Long studentId) {
         try {
@@ -71,6 +77,7 @@ public class AttendanceController {
         }
     }
 
+    /* 출석 목록 화면 - 강의별 조회 (app/admin/attendance/page.tsx) */
     @GetMapping("/course/{courseId}")
     public ApiResponse<List<Attendance>> getAttendanceByCourseId(@PathVariable Long courseId) {
         try {
@@ -81,6 +88,7 @@ public class AttendanceController {
         }
     }
 
+    /* 출석 입력 화면 (app/admin/attendance/page.tsx) */
     @PostMapping
     public ApiResponse<Attendance> createAttendance(@RequestBody CreateAttendanceRequest request) {
         try {
@@ -96,6 +104,7 @@ public class AttendanceController {
         }
     }
 
+    /* 출석 수정 화면 (app/admin/attendance/page.tsx) */
     @PutMapping("/{attendanceId}")
     public ApiResponse<Attendance> updateAttendance(@PathVariable Long attendanceId, @RequestBody UpdateAttendanceRequest request) {
         try {
@@ -110,6 +119,7 @@ public class AttendanceController {
         }
     }
 
+    /* 출석 삭제 화면 (app/admin/attendance/page.tsx) */
     @DeleteMapping("/{attendanceId}")
     public ApiResponse<Void> deleteAttendance(@PathVariable Long attendanceId) {
         try {

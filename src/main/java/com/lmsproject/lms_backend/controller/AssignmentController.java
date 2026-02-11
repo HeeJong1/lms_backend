@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/* 과제 관리 API 컨트롤러 - 과제 목록/제출/채점 화면 */
 @RestController
 @RequestMapping("/api/assignments")
 @RequiredArgsConstructor
@@ -19,7 +20,7 @@ public class AssignmentController {
 
     private final AssignmentService assignmentService;
 
-    // Assignment 관련 엔드포인트
+    /* 과제 목록 화면 (app/assignments/page.tsx) */
     @GetMapping
     public ApiResponse<List<Assignment>> getAllAssignments() {
         try {
@@ -30,6 +31,7 @@ public class AssignmentController {
         }
     }
 
+    /* 과제 상세 화면 (app/assignments/page.tsx) */
     @GetMapping("/{assignmentId}")
     public ApiResponse<Assignment> getAssignmentById(@PathVariable Long assignmentId) {
         try {
@@ -41,6 +43,7 @@ public class AssignmentController {
         }
     }
 
+    /* 과제 목록 화면 - 강의별 조회 (app/assignments/page.tsx) */
     @GetMapping("/course/{courseId}")
     public ApiResponse<List<Assignment>> getAssignmentsByCourseId(@PathVariable Long courseId) {
         try {
@@ -51,6 +54,7 @@ public class AssignmentController {
         }
     }
 
+    /* 과제 목록 화면 - 강사별 조회 (app/assignments/page.tsx) */
     @GetMapping("/instructor/{instructorId}")
     public ApiResponse<List<Assignment>> getAssignmentsByInstructorId(@PathVariable Long instructorId) {
         try {
@@ -61,6 +65,7 @@ public class AssignmentController {
         }
     }
 
+    /* 과제 생성 화면 (app/assignments/page.tsx) */
     @PostMapping
     public ApiResponse<Assignment> createAssignment(@RequestBody CreateAssignmentRequest request) {
         try {
@@ -78,6 +83,7 @@ public class AssignmentController {
         }
     }
 
+    /* 과제 수정 화면 (app/assignments/page.tsx) */
     @PutMapping("/{assignmentId}")
     public ApiResponse<Assignment> updateAssignment(@PathVariable Long assignmentId, @RequestBody UpdateAssignmentRequest request) {
         try {
@@ -94,6 +100,7 @@ public class AssignmentController {
         }
     }
 
+    /* 과제 삭제 화면 (app/assignments/page.tsx) */
     @DeleteMapping("/{assignmentId}")
     public ApiResponse<Void> deleteAssignment(@PathVariable Long assignmentId) {
         try {
@@ -104,7 +111,7 @@ public class AssignmentController {
         }
     }
 
-    // AssignmentSubmission 관련 엔드포인트
+    /* 과제 제출물 목록 화면 (app/assignments/page.tsx) */
     @GetMapping("/submissions")
     public ApiResponse<List<AssignmentSubmission>> getAllSubmissions() {
         try {
@@ -115,6 +122,7 @@ public class AssignmentController {
         }
     }
 
+    /* 과제 제출물 상세 화면 (app/assignments/page.tsx) */
     @GetMapping("/submissions/{submissionId}")
     public ApiResponse<AssignmentSubmission> getSubmissionById(@PathVariable Long submissionId) {
         try {
@@ -126,6 +134,7 @@ public class AssignmentController {
         }
     }
 
+    /* 과제 제출물 목록 화면 - 과제별 조회 (app/assignments/page.tsx) */
     @GetMapping("/{assignmentId}/submissions")
     public ApiResponse<List<AssignmentSubmission>> getSubmissionsByAssignmentId(@PathVariable Long assignmentId) {
         try {
@@ -136,6 +145,7 @@ public class AssignmentController {
         }
     }
 
+    /* 과제 제출물 목록 화면 - 학생별 조회 (app/assignments/page.tsx) */
     @GetMapping("/submissions/student/{studentId}")
     public ApiResponse<List<AssignmentSubmission>> getSubmissionsByStudentId(@PathVariable Long studentId) {
         try {
@@ -146,6 +156,7 @@ public class AssignmentController {
         }
     }
 
+    /* 과제 제출 화면 (app/assignments/page.tsx) */
     @PostMapping("/submissions")
     public ApiResponse<AssignmentSubmission> submitAssignment(@RequestBody SubmitAssignmentRequest request) {
         try {
@@ -163,6 +174,7 @@ public class AssignmentController {
         }
     }
 
+    /* 과제 제출물 수정 화면 (app/assignments/page.tsx) */
     @PutMapping("/submissions/{submissionId}")
     public ApiResponse<AssignmentSubmission> updateSubmission(@PathVariable Long submissionId, @RequestBody UpdateSubmissionRequest request) {
         try {
@@ -178,6 +190,7 @@ public class AssignmentController {
         }
     }
 
+    /* 과제 채점 화면 (app/assignments/page.tsx) */
     @PutMapping("/submissions/{submissionId}/grade")
     public ApiResponse<AssignmentSubmission> gradeSubmission(@PathVariable Long submissionId, @RequestBody GradeSubmissionRequest request) {
         try {
@@ -192,6 +205,7 @@ public class AssignmentController {
         }
     }
 
+    /* 과제 제출물 삭제 화면 (app/assignments/page.tsx) */
     @DeleteMapping("/submissions/{submissionId}")
     public ApiResponse<Void> deleteSubmission(@PathVariable Long submissionId) {
         try {

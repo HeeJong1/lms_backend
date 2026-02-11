@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+/* 인증 관련 API 컨트롤러 - 로그인/회원가입 화면 */
 @Slf4j
 @RestController
 @RequestMapping("/api/auth")
@@ -21,6 +22,7 @@ public class AuthController {
     private final UserService userService;
     private final JwtUtil jwtUtil;
     
+    /* 로그인 화면 (app/login/page.tsx) */
     @PostMapping("/login")
     public ApiResponse<LoginResponse> login(@RequestBody LoginRequest request) {
         log.info("Login request received: username={}", request != null ? request.getUsername() : "null");
@@ -57,6 +59,7 @@ public class AuthController {
         }
     }
     
+    /* 회원가입 화면 (app/register/page.tsx) */
     @PostMapping("/register")
     public ApiResponse<User> register(@RequestBody RegisterRequest request) {
         log.info("Register request received: username={}", request != null ? request.getUsername() : "null");

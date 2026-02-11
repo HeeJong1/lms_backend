@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/* 공지사항 관리 API 컨트롤러 - 공지사항 목록/작성 화면 */
 @RestController
 @RequestMapping("/api/announcements")
 @RequiredArgsConstructor
@@ -17,6 +18,7 @@ public class AnnouncementController {
 
     private final AnnouncementService announcementService;
 
+    /* 공지사항 목록 화면 (app/announcements/page.tsx) */
     @GetMapping
     public ApiResponse<List<Announcement>> getAllAnnouncements() {
         try {
@@ -27,6 +29,7 @@ public class AnnouncementController {
         }
     }
 
+    /* 공지사항 상세 화면 (app/announcements/page.tsx) */
     @GetMapping("/{announcementId}")
     public ApiResponse<Announcement> getAnnouncementById(@PathVariable Long announcementId) {
         try {
@@ -38,6 +41,7 @@ public class AnnouncementController {
         }
     }
 
+    /* 공지사항 목록 화면 - 강의별 조회 (app/announcements/page.tsx) */
     @GetMapping("/course/{courseId}")
     public ApiResponse<List<Announcement>> getAnnouncementsByCourseId(@PathVariable Long courseId) {
         try {
@@ -48,6 +52,7 @@ public class AnnouncementController {
         }
     }
 
+    /* 공지사항 목록 화면 - 작성자별 조회 (app/announcements/page.tsx) */
     @GetMapping("/author/{authorId}")
     public ApiResponse<List<Announcement>> getAnnouncementsByAuthorId(@PathVariable Long authorId) {
         try {
@@ -58,6 +63,7 @@ public class AnnouncementController {
         }
     }
 
+    /* 공지사항 목록 화면 - 중요 공지 조회 (app/announcements/page.tsx) */
     @GetMapping("/important")
     public ApiResponse<List<Announcement>> getImportantAnnouncements() {
         try {
@@ -68,6 +74,7 @@ public class AnnouncementController {
         }
     }
 
+    /* 공지사항 작성 화면 (app/announcements/page.tsx) */
     @PostMapping
     public ApiResponse<Announcement> createAnnouncement(@RequestBody CreateAnnouncementRequest request) {
         try {
@@ -85,6 +92,7 @@ public class AnnouncementController {
         }
     }
 
+    /* 공지사항 수정 화면 (app/announcements/page.tsx) */
     @PutMapping("/{announcementId}")
     public ApiResponse<Announcement> updateAnnouncement(@PathVariable Long announcementId, @RequestBody UpdateAnnouncementRequest request) {
         try {
@@ -101,6 +109,7 @@ public class AnnouncementController {
         }
     }
 
+    /* 공지사항 삭제 화면 (app/announcements/page.tsx) */
     @DeleteMapping("/{announcementId}")
     public ApiResponse<Void> deleteAnnouncement(@PathVariable Long announcementId) {
         try {

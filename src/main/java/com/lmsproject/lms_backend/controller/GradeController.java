@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+/* 성적 관리 API 컨트롤러 - 성적 조회/입력 화면 */
 @RestController
 @RequestMapping("/api/grades")
 @RequiredArgsConstructor
@@ -18,6 +19,7 @@ public class GradeController {
 
     private final GradeService gradeService;
 
+    /* 성적 관리 화면 - 전체 성적 목록 (app/admin/grades/page.tsx) */
     @GetMapping
     public ApiResponse<List<Grade>> getAllGrades() {
         try {
@@ -28,6 +30,7 @@ public class GradeController {
         }
     }
 
+    /* 성적 상세 화면 (app/admin/grades/page.tsx) */
     @GetMapping("/{gradeId}")
     public ApiResponse<Grade> getGradeById(@PathVariable Long gradeId) {
         try {
@@ -39,6 +42,7 @@ public class GradeController {
         }
     }
 
+    /* 성적 조회 화면 - 수강신청별 조회 (app/admin/grades/page.tsx) */
     @GetMapping("/enrollment/{enrollmentId}")
     public ApiResponse<Grade> getGradeByEnrollmentId(@PathVariable Long enrollmentId) {
         try {
@@ -50,6 +54,7 @@ public class GradeController {
         }
     }
 
+    /* 성적 조회 화면 - 학생별 조회 (app/admin/grades/page.tsx) */
     @GetMapping("/student/{studentId}")
     public ApiResponse<List<Grade>> getGradesByStudentId(@PathVariable Long studentId) {
         try {
@@ -60,6 +65,7 @@ public class GradeController {
         }
     }
 
+    /* 성적 조회 화면 - 강의별 조회 (app/admin/grades/page.tsx) */
     @GetMapping("/course/{courseId}")
     public ApiResponse<List<Grade>> getGradesByCourseId(@PathVariable Long courseId) {
         try {
@@ -70,6 +76,7 @@ public class GradeController {
         }
     }
 
+    /* 성적 입력 화면 (app/admin/grades/page.tsx) */
     @PostMapping
     public ApiResponse<Grade> createGrade(@RequestBody CreateGradeRequest request) {
         try {
@@ -87,6 +94,7 @@ public class GradeController {
         }
     }
 
+    /* 성적 수정 화면 (app/admin/grades/page.tsx) */
     @PutMapping("/{gradeId}")
     public ApiResponse<Grade> updateGrade(@PathVariable Long gradeId, @RequestBody UpdateGradeRequest request) {
         try {
@@ -104,6 +112,7 @@ public class GradeController {
         }
     }
 
+    /* 성적 삭제 화면 (app/admin/grades/page.tsx) */
     @DeleteMapping("/{gradeId}")
     public ApiResponse<Void> deleteGrade(@PathVariable Long gradeId) {
         try {
